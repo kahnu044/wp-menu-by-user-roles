@@ -3,8 +3,8 @@ Contributors: kahnu044
 Tags: menu, user roles, access control, navigation, role-based menus,site navigation, menu visibility
 Requires at least: 4.0
 Requires PHP: 7.0
-Tested up to: 6.4.1
-Stable tag: 1.0.2
+Tested up to: 6.5.2
+Stable tag: 1.0.3
 License: GPL2+
 License URI: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
@@ -27,6 +27,9 @@ For more information and usage instructions, visit the [GitHub Repository](https
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 1.0.3 =
+* Update: Tested with latest WordPress 6.5.2
 
 = 1.0.2 =
 * Feature: Multiple user roles added
