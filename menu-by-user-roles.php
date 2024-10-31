@@ -3,9 +3,9 @@
  * Plugin Name:       Menu By User Roles
  * Plugin URI:        https://github.com/kahnu044/menu-by-user-roles
  * Description:       It empowers website administrators to create custom menus tailored to specific user roles.
- * Version:           1.0.3
- * Requires at least: 5.2
- * Requires PHP:      7.2
+ * Version:           1.0.4
+ * Requires at least: 5.0
+ * Requires PHP:      7.0
  * Author:            kahnu044
  * Author URI:        https://github.com/kahnu044
  * License:           GPL2+
@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'MBUR_PLUGIN_VERSION', '1.0.3' );
+define( 'MBUR_PLUGIN_VERSION', '1.0.4' );
 
 /**
  * Enqueue Select2 scripts and styles for the menu.
