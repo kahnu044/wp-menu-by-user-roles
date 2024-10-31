@@ -1,6 +1,6 @@
 === Menu By User Roles ===
 Contributors: kahnu044
-Tags: menu, user roles, access control, navigation, role-based menus,site navigation, menu visibility
+Tags: Tags: menu-visibility, user-roles, role-based-menus, access-control, site-navigation
 Requires at least: 4.0
 Requires PHP: 7.0
 Tested up to: 6.5.2
@@ -23,7 +23,7 @@ For more information and usage instructions, visit the [GitHub Repository](https
 == Screenshots ==
 
 1. Here is an example of a menu item with user role selection options.
-
+`
 == Upgrade Notice ==
 
 == Changelog ==
