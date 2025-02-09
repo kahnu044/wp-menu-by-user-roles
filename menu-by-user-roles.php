@@ -123,7 +123,6 @@ function menuby_user_roles_filter_menu_items($items)
 }
 add_filter('wp_nav_menu_objects', 'menuby_user_roles_filter_menu_items');
 
-
 /**
  * Enqueue block editor assets and pass user roles to JavaScript.
  */
@@ -132,7 +131,16 @@ function menu_by_user_roles_enqueue_editor_assets()
 	// Get all available user roles
 	global $wp_roles;
 	$roles = $wp_roles->roles;
-	$role_options = [];
+	$role_options = [
+		[
+			'label' => 'All Users',
+			'value' => 'all'
+		],
+		[
+			'label' => 'C (Logged-Out Users)',
+			'value' => 'unauthenticated'
+		]
+	];
 
 	foreach ($roles as $role_key => $role_info) {
 		$role_options[] = [
@@ -157,7 +165,6 @@ function menu_by_user_roles_enqueue_editor_assets()
 }
 add_action('enqueue_block_editor_assets', 'menu_by_user_roles_enqueue_editor_assets');
 
-
 /**
  * Filters the rendering of the Navigation Link block to enforce user role visibility.
  *
@@ -171,24 +178,27 @@ function menu_by_user_roles_filter_navigation_link_render($block_content, $block
 	if ($block['blockName'] === 'core/navigation-link' && isset($block['attrs']['userRoleVisibility'])) {
 		$selected_roles = $block['attrs']['userRoleVisibility'];
 
-		// Ensure selected roles is an array
-		if (!is_array($selected_roles)) {
-			$selected_roles = [];
-		}
-
-		$current_user = wp_get_current_user();
-		$user_roles = (array) $current_user->roles;
-
-		// If no roles are selected, show the menu item to everyone
-		if (empty($selected_roles)) {
+		// If no roles are selected or "All" is selected, show the menu item to everyone
+		if (empty($selected_roles) || in_array('all', $selected_roles)) {
 			return $block_content;
 		}
 
-		// Check if the current user has any of the selected roles
-		$has_access = array_intersect($selected_roles, $user_roles);
+		$is_logged_in = is_user_logged_in();
+		$current_user = wp_get_current_user();
+		$user_roles = (array) $current_user->roles;
 
-		// Hide the menu item if the user has no matching roles
-		if (empty($has_access)) {
+		// If the user is not logged in, assign "unauthenticated" role
+		if (empty($user_roles)) {
+			$user_roles = ['unauthenticated'];
+		}
+
+		// // Hide if logged in and selected unauthenticated role
+		if (in_array('unauthenticated', $selected_roles) && $is_logged_in) {
+			return '';
+		}
+
+		// Hide menu item if no matching selected roles
+		if (empty(array_intersect($selected_roles, $user_roles))) {
 			return '';
 		}
 	}
