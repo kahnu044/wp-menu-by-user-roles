@@ -23,26 +23,25 @@ if (! defined('ABSPATH')) {
 define('MBUR_PLUGIN_VERSION', '1.0.5');
 
 /**
- * Enqueue Select2 scripts and styles for the menu.
+ * Enqueue scripts and styles for the menu.
  */
-function menuby_user_roles_enqueue_select2()
+function menu_by_user_roles_enqueue_assets()
 {
 	$screen = get_current_screen();
-	if ('nav-menus' === $screen->id) {
-		wp_enqueue_style('menuby-user-roles-select2-style', plugins_url('assets/css/select2.min.css', __FILE__), array(), MBUR_PLUGIN_VERSION);
-		wp_enqueue_script('menuby-user-roles-select2-script', plugins_url('assets/js/select2.min.js', __FILE__), array('jquery'), MBUR_PLUGIN_VERSION, true);
-		wp_enqueue_script('menuby-user-roles-main-script', plugins_url('assets/js/main.js', __FILE__), array('jquery'), MBUR_PLUGIN_VERSION, true);
+	if ('nav-menus' === $screen->id || 'site-editor' === $screen->id) {
+		wp_enqueue_style('menu_by-user-roles-select2-style', plugins_url('assets/css/select2.min.css', __FILE__), array(), MBUR_PLUGIN_VERSION);
+		wp_enqueue_script('menu_by-user-roles-select2-script', plugins_url('assets/js/select2.min.js', __FILE__), array('jquery'), MBUR_PLUGIN_VERSION, true);
+		wp_enqueue_script('menu_by-user-roles-main-script', plugins_url('assets/js/main.js', __FILE__), array('jquery'), MBUR_PLUGIN_VERSION, true);
 	}
 }
-add_action('admin_enqueue_scripts', 'menuby_user_roles_enqueue_select2');
-
+add_action('admin_enqueue_scripts', 'menu_by_user_roles_enqueue_assets');
 
 /**
- * Render a custom user role selection field for a menu item.
+ * Render a custom user role selection field for single menu item.
  *
  * @param int $item_id Menu item ID.
  */
-function menuby_user_roles_wp_menu_item_user_role_section($item_id)
+function menu_by_user_roles_wp_menu_item_user_role_section($item_id)
 {
 
 	$selected_roles = get_post_meta($item_id, '_wp_menu_item_user_roles', true);
@@ -51,7 +50,7 @@ function menuby_user_roles_wp_menu_item_user_role_section($item_id)
 	echo '<p class="field-wp-user-roles description description-wide">';
 	echo '<label for="edit-menu-item-user-role-' . esc_attr($item_id) . '">';
 	echo 'Choose User Roles <br/>';
-	echo '<select style="width: 100%" multiple="multiple" class="widefat menuby-user-roles-dropdown" name="menuby_user_roles_menu_item_roles[' . esc_attr($item_id) . '][]" id="wp-mbur-menu-item-roles-' . esc_attr($item_id) . '">';
+	echo '<select style="width: 100%" multiple="multiple" class="widefat menu_by-user-roles-dropdown" name="menu_by_user_roles_menu_item_roles[' . esc_attr($item_id) . '][]" id="wp-mbur-menu-item-roles-' . esc_attr($item_id) . '">';
 
 	// Predefined options.
 	echo '<option value="all" ' . (empty($selected_roles) || (is_array($selected_roles) && in_array('all', $selected_roles, true)) ? 'selected' : '') . '>All</option>';
@@ -66,12 +65,12 @@ function menuby_user_roles_wp_menu_item_user_role_section($item_id)
 	echo '</select>';
 
 	// Add nonce field to the form.
-	wp_nonce_field('menuby_user_roles_nonce_action', 'menuby_user_roles_nonce');
+	wp_nonce_field('menu_by_user_roles_nonce_action', 'menu_by_user_roles_nonce');
 
 	echo '</label></p>';
 }
 
-add_action('wp_nav_menu_item_custom_fields', 'menuby_user_roles_wp_menu_item_user_role_section', 10, 2);
+add_action('wp_nav_menu_item_custom_fields', 'menu_by_user_roles_wp_menu_item_user_role_section', 10, 2);
 
 /**
  * Save user role data for a menu item.
@@ -79,19 +78,19 @@ add_action('wp_nav_menu_item_custom_fields', 'menuby_user_roles_wp_menu_item_use
  * @param int $menu_id         Menu ID.
  * @param int $menu_item_db_id Menu item ID.
  */
-function menuby_user_roles_save_menu_item_user_role_data($menu_id, $menu_item_db_id)
+function menu_by_user_roles_save_menu_item_user_role_data($menu_id, $menu_item_db_id)
 {
-	if (! isset($_POST['menuby_user_roles_nonce']) || ! wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['menuby_user_roles_nonce'])), 'menuby_user_roles_nonce_action')) {
+	if (! isset($_POST['menu_by_user_roles_nonce']) || ! wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['menu_by_user_roles_nonce'])), 'menu_by_user_roles_nonce_action')) {
 		return;
 	}
 
-	$selected_roles = isset($_POST['menuby_user_roles_menu_item_roles'][$menu_item_db_id])
-		? array_filter(array_unique(array_map('sanitize_text_field', wp_unslash($_POST['menuby_user_roles_menu_item_roles'][$menu_item_db_id]))))
+	$selected_roles = isset($_POST['menu_by_user_roles_save_menu_item_user_role_data'][$menu_item_db_id])
+		? array_filter(array_unique(array_map('sanitize_text_field', wp_unslash($_POST['menu_by_user_roles_save_menu_item_user_role_data'][$menu_item_db_id]))))
 		: '';
 
 	update_post_meta($menu_item_db_id, '_wp_menu_item_user_roles', $selected_roles);
 }
-add_action('wp_update_nav_menu_item', 'menuby_user_roles_save_menu_item_user_role_data', 10, 2);
+add_action('wp_update_nav_menu_item', 'menu_by_user_roles_save_menu_item_user_role_data', 10, 2);
 
 
 /**
@@ -100,7 +99,7 @@ add_action('wp_update_nav_menu_item', 'menuby_user_roles_save_menu_item_user_rol
  * @param array $items Menu items.
  * @return array Filtered menu items.
  */
-function menuby_user_roles_filter_menu_items($items)
+function menu_by_user_roles_filter_menu_items($items)
 {
 	$user          = wp_get_current_user();
 	$allowed_items = array();
@@ -121,7 +120,7 @@ function menuby_user_roles_filter_menu_items($items)
 
 	return $allowed_items;
 }
-add_filter('wp_nav_menu_objects', 'menuby_user_roles_filter_menu_items');
+add_filter('wp_nav_menu_objects', 'menu_by_user_roles_filter_menu_items');
 
 /**
  * Enqueue block editor assets and pass user roles to JavaScript.
