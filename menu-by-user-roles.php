@@ -117,3 +117,77 @@ function menuby_user_roles_filter_menu_items( $items ) {
 	return $allowed_items;
 }
 add_filter( 'wp_nav_menu_objects', 'menuby_user_roles_filter_menu_items' );
+
+
+/**
+ * Enqueue block editor assets and pass user roles to JavaScript.
+ */
+function menu_by_user_roles_enqueue_editor_assets()
+{
+	// Get all available user roles
+	global $wp_roles;
+	$roles = $wp_roles->roles;
+	$role_options = [];
+
+	foreach ($roles as $role_key => $role_info) {
+		$role_options[] = [
+			'label' => $role_info['name'],
+			'value' => $role_key
+		];
+	}
+
+	// Enqueue the JavaScript file for modifying the navigation link block
+	wp_enqueue_script(
+		'cnv-block-editor',
+		plugin_dir_url(__FILE__) . 'assets/js/core-navigation-link-block.js',
+		array('wp-hooks', 'wp-i18n', 'wp-blocks', 'wp-editor', 'wp-components', 'wp-compose', 'wp-element'),
+		filemtime(plugin_dir_path(__FILE__) . 'assets/js/core-navigation-link-block.js'),
+		true
+	);
+
+	// Pass role options to JavaScript for use in the block editor
+	wp_localize_script('cnv-block-editor', 'cnvData', [
+		'userRoles' => $role_options
+	]);
+}
+add_action('enqueue_block_editor_assets', 'menu_by_user_roles_enqueue_editor_assets');
+
+
+/**
+ * Filters the rendering of the Navigation Link block to enforce user role visibility.
+ *
+ * @param string $block_content The HTML content of the block.
+ * @param array $block The full block object, including attributes.
+ * @return string Modified block content based on user role visibility.
+ */
+function menu_by_user_roles_filter_navigation_link_render($block_content, $block)
+{
+	// Check if the block is a Navigation Link and has the custom attribute
+	if ($block['blockName'] === 'core/navigation-link' && isset($block['attrs']['userRoleVisibility'])) {
+		$selected_roles = $block['attrs']['userRoleVisibility'];
+
+		// Ensure selected roles is an array
+		if (!is_array($selected_roles)) {
+			$selected_roles = [];
+		}
+
+		$current_user = wp_get_current_user();
+		$user_roles = (array) $current_user->roles;
+
+		// If no roles are selected, show the menu item to everyone
+		if (empty($selected_roles)) {
+			return $block_content;
+		}
+
+		// Check if the current user has any of the selected roles
+		$has_access = array_intersect($selected_roles, $user_roles);
+
+		// Hide the menu item if the user has no matching roles
+		if (empty($has_access)) {
+			return '';
+		}
+	}
+
+	return $block_content;
+}
+add_filter('render_block', 'menu_by_user_roles_filter_navigation_link_render', 10, 2);
