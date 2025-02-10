@@ -26,7 +26,12 @@ Welcome to the official GitHub repository for "Menu By User Roles," the ultimate
 ## Screenshots
 
 ![Screenshot 1](assets/screenshots/menu-by-user-roles-screenshot.png)
+
 _*Here is an example of a menu item with user role selection options.*_
+
+![Screenshot 2](assets/screenshots/menu-by-user-roles-block-navigation.png)
+
+_*Example of a menu item with user role selection options in block navigation.*_
 
 ## Contributing
 

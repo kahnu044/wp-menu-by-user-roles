@@ -4,7 +4,7 @@ Tags: Tags: menu-visibility, user-roles, role-based-menus, access-control, site-
 Requires at least: 5.0
 Requires PHP: 7.0
 Tested up to: 6.7.1
-Stable tag: 1.0.5
+Stable tag: 2.0.0
 License: GPL2+
 License URI: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
@@ -25,10 +25,16 @@ For more information and usage instructions, visit the [GitHub Repository](https
 == Screenshots ==
 
 1. Here is an example of a menu item with user role selection options.
-`
+
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 2.0.0 =
+* Feature: Added WordPress Block Theme Navigation Support – Now fully compatible with block-based themes using the Navigation block.
+* Update: Multi-Role Selection for Block-Based Navigation – Users can now select multiple roles when configuring menu items in block-based navigation settings.
+* Update: Fixed Elementor Select2 Conflict – Resolved UI issue where the role selection dropdown was not displaying correctly when Elementor was installed.
+* Update: Enhanced UI & UX – Improved overall appearance and user experience for better usability.
 
 = 1.0.5 =
 * Update: Tested with latest WordPress 6.7.1
