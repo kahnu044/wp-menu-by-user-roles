@@ -136,7 +136,7 @@ function menu_by_user_roles_enqueue_editor_assets()
 			'value' => 'all'
 		],
 		[
-			'label' => 'C (Logged-Out Users)',
+			'label' => 'Unauthenticated (Logged-Out Users)',
 			'value' => 'unauthenticated'
 		]
 	];
@@ -150,7 +150,7 @@ function menu_by_user_roles_enqueue_editor_assets()
 
 	// Enqueue the JavaScript file for modifying the navigation link block
 	wp_enqueue_script(
-		'cnv-block-editor',
+		'mbur-block-editor',
 		plugin_dir_url(__FILE__) . 'assets/js/core-navigation-link-block.js',
 		array('wp-hooks', 'wp-i18n', 'wp-blocks', 'wp-editor', 'wp-components', 'wp-compose', 'wp-element'),
 		filemtime(plugin_dir_path(__FILE__) . 'assets/js/core-navigation-link-block.js'),
@@ -158,7 +158,7 @@ function menu_by_user_roles_enqueue_editor_assets()
 	);
 
 	// Pass role options to JavaScript for use in the block editor
-	wp_localize_script('cnv-block-editor', 'cnvData', [
+	wp_localize_script('mbur-block-editor', 'mburData', [
 		'userRoles' => $role_options
 	]);
 }

@@ -60,10 +60,22 @@
             { title: "Menu Visibility" },
             wp.element.createElement(FormTokenField, {
               label: "Choose User Roles",
-              value: userRoleVisibility,
-              suggestions: cnvData.userRoles.map((role) => role.value),
+              value: userRoleVisibility.map((role) => {
+                const foundRole = mburData.userRoles.find(
+                  (r) => r.value === role
+                );
+                return foundRole ? foundRole.label : role;
+              }),
+              suggestions: mburData.userRoles.map((role) => role.label),
               onChange: (newRoles) => {
-                setAttributes({ userRoleVisibility: newRoles });
+                const roleValues = newRoles.map((label) => {
+                  const foundRole = mburData.userRoles.find(
+                    (r) => r.label === label
+                  );
+                  return foundRole ? foundRole.value : label;
+                });
+
+                setAttributes({ userRoleVisibility: roleValues });
 
                 // Close suggestions by temporarily shifting focus
                 setTimeout(() => document.activeElement.blur(), 100);
