@@ -8,6 +8,8 @@ Stable tag: 1.0.5
 License: GPL2+
 License URI: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
+Menu By User Roles allows you to control the visibility of menu items based on user roles.
+
 == Description ==
 
 Menu By User Roles is a WordPress plugin that allows you to control the visibility of menu items based on user roles. You can assign specific user roles to each menu item, ensuring that only users with those roles can see and access the corresponding links.
