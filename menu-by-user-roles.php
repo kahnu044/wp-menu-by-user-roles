@@ -84,8 +84,8 @@ function menu_by_user_roles_save_menu_item_user_role_data($menu_id, $menu_item_d
 		return;
 	}
 
-	$selected_roles = isset($_POST['menu_by_user_roles_save_menu_item_user_role_data'][$menu_item_db_id])
-		? array_filter(array_unique(array_map('sanitize_text_field', wp_unslash($_POST['menu_by_user_roles_save_menu_item_user_role_data'][$menu_item_db_id]))))
+	$selected_roles = isset($_POST['menu_by_user_roles_menu_item_roles'][$menu_item_db_id])
+		? array_filter(array_unique(array_map('sanitize_text_field', wp_unslash($_POST['menu_by_user_roles_menu_item_roles'][$menu_item_db_id]))))
 		: '';
 
 	update_post_meta($menu_item_db_id, '_wp_menu_item_user_roles', $selected_roles);
