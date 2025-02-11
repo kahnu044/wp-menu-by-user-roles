@@ -4,7 +4,7 @@ Tags: Tags: menu-visibility, user-roles, role-based-menus, access-control, site-
 Requires at least: 5.0
 Requires PHP: 7.0
 Tested up to: 6.7.1
-Stable tag: 2.0.0
+Stable tag: 2.0.1
 License: GPL2+
 License URI: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
@@ -29,6 +29,9 @@ For more information and usage instructions, visit the [GitHub Repository](https
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 2.0.1 =
+* Update: Block-Based Navigation Issue Fixed
 
 = 2.0.0 =
 * Feature: Added WordPress Block Theme Navigation Support – Now fully compatible with block-based themes using the Navigation block.
